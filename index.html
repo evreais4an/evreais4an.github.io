@@ -148,7 +148,7 @@ function shuffleArray(array) {
     fetch('data.json?ver=' + new Date().getTime())
 	.then(response => response.json())
 	.then(jsonData => {
-		jsonData = shuffleArray(jsonData); // 🔁 перемешиваем
+		jsonData = shuffleArray(jsonData);
 	
 		const cardContainer = document.getElementById('card-container');
 		const log = [];
@@ -190,12 +190,10 @@ function shuffleArray(array) {
 
           const age = document.createElement('p');
           age.textContent = `Nivelo: ${item.чтото2}`;
-
-          // Оборачиваем изображение в ссылку на плеер
           const videoLink = document.createElement('a');
           videoLink.href = `player.html?video=${videoId}`;
-          videoLink.target = "_blank";  // Видео откроется в новой вкладке
-          videoLink.appendChild(previewImage);  // Ссылка содержит картинку
+          videoLink.target = "_blank"; 
+          videoLink.appendChild(previewImage); 
 
           card.appendChild(videoLink);
           card.appendChild(title);
