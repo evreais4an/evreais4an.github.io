@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="eo">
+<head>
+  <meta charset="UTF-8">
+  <title>Filmetoj</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    html, body {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .log-container {
+      background-color: #fff;
+      margin: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .log-message {
+      font-family: "Courier New", Courier, monospace;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .card {
+      background-color: white;
+      padding: 20px;
+      margin: 15px;
+      width: 280px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .card h3 {
+      margin: 10px 0;
+    }
+    .card p {
+      font-size: 16px;
+      color: #555;
+    }
+    .search-form {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .search-form input {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+    .search-form button {
+      padding: 8px 16px;
+      font-size: 16px;
+      margin-left: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    .search-form button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align: center;">Esperanta Videokolekto</h2>
+
+  <div class="search-form">
+    <input type="text" id="search-input" placeholder="Enigu tekston por serĉi">
+    <button id="search-button">Serĉi</button>
+    <select id="level-select">
+      <option value="1">Ĉiuj</option>
+      <option value="2">A1</option>
+      <option value="3">A2</option>
+      <option value="4">B1</option>
+      <option value="5">B2</option>
+      <option value="6">C1</option>
+    </select>
+  </div>
+
+  <div id="log-container" class="log-container">
+    <h2 id="output"></h2>
+    <h2>Serĉrezulto:</h2>
+    <p id="search-result"></p>
+  </div>
+
+  <div id="card-container" class="card-container"></div>
+
+  <script>
+    var ii = 0;
+    function getVideoId(url) {
+      return url && url.trim() ? url.trim() : null;
+    }
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+    var nvl = ["c", "c", "A1", "A2", "B1", "B2", "C1"];
+    const urlParams = new URLSearchParams(window.location.search);
+    const arg1 = urlParams.get('search'); 
+    const arg2 = urlParams.get('level'); 
+
+    console.log("PArametro 'search':", arg1);
+    console.log("PArametro 'level':", arg2);
+
+    function performSearch() {
+      const searchQuery = document.getElementById('search-input').value.trim();
+      const selectedLevel = document.getElementById('level-select').value;
+      window.location.href = `index.html?search=${encodeURIComponent(searchQuery)}&level=${encodeURIComponent(selectedLevel)}`;
+    }
+
+    document.getElementById('search-button').addEventListener('click', performSearch);
+
+    document.getElementById('search-input').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        performSearch();
+      }
+    });
+
+    if (arg1) {
+      document.getElementById('search-result').textContent = `Serĉu laŭ peto: "${arg1}"`;
+    }
+
+    fetch('data.json?ver=' + new Date().getTime())
+	.then(response => response.json())
+	.then(jsonData => {
+		jsonData = shuffleArray(jsonData); // 🔁 перемешиваем
+	
+		const cardContainer = document.getElementById('card-container');
+		const log = [];
+		const searchPattern = arg1 ? new RegExp(arg1, 'i') : null;
+		const levelFilter = arg2 ? arg2 : '1';
+
+        console.log("Komplekseca filtrilo:", levelFilter);
+        if (arg1) {
+          document.getElementById('search-input').value = arg1;
+        }
+        if (arg2) {
+          document.getElementById('level-select').value = arg2;
+        }
+
+        jsonData.forEach((item, index) => {
+          const videoId = getVideoId(item.url);
+          if (!videoId) return;
+
+          if (searchPattern && !searchPattern.test(item.чтото1 + " de " + item.kanalo)) {
+            return;
+          }
+
+          if (levelFilter !== '1' && item.чтото2 !== nvl[levelFilter]) {
+            return;
+          }
+
+          ii++;
+          console.log(ii);
+
+          const card = document.createElement('div');
+          card.classList.add('card');
+
+          const previewImage = document.createElement('img');
+          previewImage.src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg?${index}`;
+          previewImage.alt = "FIlmeto";
+
+          const title = document.createElement('h3');
+          title.textContent = item.чтото1 + " de " + item.kanalo;
+
+          const age = document.createElement('p');
+          age.textContent = `Nivelo: ${item.чтото2}`;
+
+          // Оборачиваем изображение в ссылку на плеер
+          const videoLink = document.createElement('a');
+          videoLink.href = `player.html?video=${videoId}`;
+          videoLink.target = "_blank";  // Видео откроется в новой вкладке
+          videoLink.appendChild(previewImage);  // Ссылка содержит картинку
+
+          card.appendChild(videoLink);
+          card.appendChild(title);
+          card.appendChild(age);
+
+          cardContainer.appendChild(card);
+        });
+
+        document.getElementById("output").textContent = "Filmetojn: " + ii.toString();
+      })
+      .catch(error => {
+        console.error("JSON erroro:", error);
+      });
+  </script>
+
+</body>
+</html>

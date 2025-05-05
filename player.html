@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="eo">
+<head>
+  <meta charset="UTF-8">
+  <title>Video-Ludilo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      padding: 40px;
+    }
+    iframe {
+      width: 80%;
+      height: 450px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    h1 {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" style="position:fixed; left:5px; font-size:20px;">Filmetoj<a>
+  <h1>Vidu la videon</h1>
+
+  <div id="player-container">
+    <p>Ŝargante videon...</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get("video");
+
+    const container = document.getElementById("player-container");
+
+    if (videoId) {
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      container.innerHTML = ""; // forigas "Ŝargante..."
+      container.appendChild(iframe);
+    } else {
+      container.innerHTML = "<p>⚠️ Mankas video-ID. Uzu ekz. <code>?video=dQw4w9WgXcQ</code></p>";
+    }
+  </script>
+
+</body>
+</html>
