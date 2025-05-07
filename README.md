@@ -1,1 +1,1 @@
-Kolekciono de filmetojn en Esperanto kun proksima 200 filmetojn.
+Kolekciono de filmetojn en Esperanto kun proksima 236 filmetojn.
