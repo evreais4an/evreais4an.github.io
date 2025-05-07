@@ -90,11 +90,13 @@
     <button id="search-button">Serĉi</button>
     <select id="level-select">
       <option value="1">Ĉiuj</option>
-      <option value="2">A1</option>
-      <option value="3">A2</option>
-      <option value="4">B1</option>
-      <option value="5">B2</option>
-      <option value="6">C1</option>
+      <option value="2">Ludado</option>
+      <option value="3">Scienco</option>
+      <option value="4">Edukado</option>
+      <option value="5">Esperanto</option>
+      <option value="6">Blogo</option>
+	  <option value="7">Muziko</option>
+	  <option value="8">Filmo</option>
     </select>
   </div>
 
@@ -119,18 +121,18 @@ function shuffleArray(array) {
   return array;
 }
 
-    var nvl = ["c", "c", "A1", "A2", "B1", "B2", "C1"];
+    var nvl = ["c", "c", "ludado", "scienco", "edukado", "esperanto", "blogo","muziko","filmo"];
     const urlParams = new URLSearchParams(window.location.search);
     const arg1 = urlParams.get('search'); 
-    const arg2 = urlParams.get('level'); 
+    const arg2 = urlParams.get('kategorio'); 
 
-    console.log("PArametro 'search':", arg1);
-    console.log("PArametro 'level':", arg2);
+    console.log("Parametro 'search':", arg1);
+    console.log("Parametro 'kategorio':", arg2);
 
     function performSearch() {
       const searchQuery = document.getElementById('search-input').value.trim();
       const selectedLevel = document.getElementById('level-select').value;
-      window.location.href = `index.html?search=${encodeURIComponent(searchQuery)}&level=${encodeURIComponent(selectedLevel)}`;
+      window.location.href = `index.html?search=${encodeURIComponent(searchQuery)}&kategorio=${encodeURIComponent(selectedLevel)}`;
     }
 
     document.getElementById('search-button').addEventListener('click', performSearch);
@@ -148,7 +150,7 @@ function shuffleArray(array) {
     fetch('data.json?ver=' + new Date().getTime())
 	.then(response => response.json())
 	.then(jsonData => {
-		jsonData = shuffleArray(jsonData);
+		jsonData = shuffleArray(jsonData); // 🔁 перемешиваем
 	
 		const cardContainer = document.getElementById('card-container');
 		const log = [];
@@ -171,7 +173,7 @@ function shuffleArray(array) {
             return;
           }
 
-          if (levelFilter !== '1' && item.чтото2 !== nvl[levelFilter]) {
+          if (levelFilter !== '1' && item.t !== nvl[levelFilter]) {
             return;
           }
 
@@ -189,11 +191,13 @@ function shuffleArray(array) {
           title.textContent = item.чтото1 + " de " + item.kanalo;
 
           const age = document.createElement('p');
-          age.textContent = `Nivelo: ${item.чтото2}`;
+          age.textContent = `Kategorio: ${item.t}`;
+
+          // Оборачиваем изображение в ссылку на плеер
           const videoLink = document.createElement('a');
           videoLink.href = `player.html?video=${videoId}`;
-          videoLink.target = "_blank"; 
-          videoLink.appendChild(previewImage); 
+          videoLink.target = "_blank";  // Видео откроется в новой вкладке
+          videoLink.appendChild(previewImage);  // Ссылка содержит картинку
 
           card.appendChild(videoLink);
           card.appendChild(title);
